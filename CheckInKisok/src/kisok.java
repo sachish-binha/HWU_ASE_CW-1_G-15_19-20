@@ -44,7 +44,7 @@ public class kisok extends JFrame implements ActionListener {
 	private String extracharge = "";
 
 	public void createWindowOne() {
-		frameOne = new JFrame("CheckIn Machine");
+		frameOne = new JFrame("Main Window");
 		frameOne.setDefaultCloseOperation(frameOne.EXIT_ON_CLOSE);
 		createPanelOne();
 		frameOne.setSize(1000, 200);
@@ -52,7 +52,43 @@ public class kisok extends JFrame implements ActionListener {
 		frameOne.setLayout(new BorderLayout());
 		frameOne.setLocation(200, 200);
 	}
+	
+	public void createWindowTwo() {
+		frameTwo = new JFrame("Baggage");
+		frameTwo.setDefaultCloseOperation(frameTwo.DISPOSE_ON_CLOSE);
+		createPanelThree();
+		frameTwo.setSize(1000, 200);
+		frameTwo.setVisible(true);
+		frameTwo.setLayout(new BorderLayout());
+		frameTwo.setLocation(200, 200);
 
+		
+	}
+	
+	public void createWindowThree() {
+		frameThree= new JFrame("Summary");
+		frameThree.setDefaultCloseOperation(frameThree.DISPOSE_ON_CLOSE);
+		createPanelFour();
+		frameThree.setSize(500, 500);
+		frameThree.setVisible(true);
+		frameThree.setLayout(new BorderLayout());
+		frameThree.setLocation(200, 200);
+
+	}
+	
+	public void createSummaryWindow() {
+
+		frameFour = new JFrame("Summary");
+		frameFour.setDefaultCloseOperation(frameFour.DISPOSE_ON_CLOSE);
+		createPanelFive();
+		frameFour.setSize(500, 500);
+		frameFour.setVisible(true);
+		frameFour.setLayout(new BorderLayout());
+		frameFour.setLocation(200, 200);
+
+	}
+	
+	
 	public void createPanelOne() {
 		referenceTextField = new JTextField(16);
 
@@ -132,17 +168,7 @@ public class kisok extends JFrame implements ActionListener {
 
 	}
 
-	public void createWindowTwo() {
-		frameTwo = new JFrame("Baggage");
-		frameTwo.setDefaultCloseOperation(frameTwo.EXIT_ON_CLOSE);
-		createPanelThree();
-		frameTwo.setSize(1000, 200);
-		frameTwo.setVisible(true);
-		frameTwo.setLayout(new BorderLayout());
-		frameTwo.setLocation(200, 200);
-
-		frameTwo.getContentPane().add(panelThree, BorderLayout.WEST);
-	}
+	
 
 	public void createPanelThree() {
 
@@ -170,24 +196,15 @@ public class kisok extends JFrame implements ActionListener {
 		panelThree.add(extraChargeButton);
 		panelThree.add(extraChargeLabel);
 		panelThree.add(checkInButton);
+		
+		frameTwo.getContentPane().add(panelThree, BorderLayout.WEST);
 
 	}
 
-	public void createWindowThree() {
-		frameFour= new JFrame("Summary");
-		frameFour.setDefaultCloseOperation(frameFour.EXIT_ON_CLOSE);
-		createPanelFive();
-		frameFour.setSize(500, 500);
-		frameFour.setVisible(true);
-		frameFour.setLayout(new BorderLayout());
-		frameFour.setLocation(200, 200);
+	
 
-		frameFour.getContentPane().add(panelThree, BorderLayout.CENTER);
-
-	}
-
-	public void createPanelFive() {
-		panelFive = new JPanel();
+	public void createPanelFour() {
+		panelFour = new JPanel();
 
 		home = new JButton("Home");
 		summary = new JButton("Summary");
@@ -195,29 +212,21 @@ public class kisok extends JFrame implements ActionListener {
 		home.addActionListener(this);
 		summary.addActionListener(this);
 
-		panelFive.add(home);
-		panelFive.add(summary);
+		panelFour.add(home);
+		panelFour.add(summary);
 		
-		frameFour.getContentPane().add(panelFive);
+
+		frameThree.getContentPane().add(panelFour, BorderLayout.CENTER);
+
+		
 	}
 
-	public void createSummaryWindow() {
 
-		frameThree = new JFrame("Summary");
-		frameThree.setDefaultCloseOperation(frameThree.EXIT_ON_CLOSE);
-		createPanelFour();
-		frameThree.setSize(500, 500);
-		frameThree.setVisible(true);
-		frameThree.setLayout(new BorderLayout());
-		frameThree.setLocation(200, 200);
 
-		frameThree.getContentPane().add(panelThree, BorderLayout.CENTER);
 
-	}
+	public void createPanelFive() {
 
-	public void createPanelFour() {
-
-		panelFour = new JPanel();
+		panelFive = new JPanel();
 
 		JLabel checkedInPasslabel = new JLabel(
 				"**** Total " + checkInMachineObj.totalPassengersCheckedIn + " Passengers Checked In ****");
@@ -228,16 +237,14 @@ public class kisok extends JFrame implements ActionListener {
 		JLabel feelabel = new JLabel("**** Total " + checkInMachineObj.totalExcessBaggageFeeCollected
 				+ " execess baagege fee collected ****");
 
-		panelFour.add(checkedInPasslabel);
-		;
-		panelFour.add(bagVollabel);
-		panelFour.add(bagWeighLabel);
-		panelFour.add(feelabel);
-
-		frameThree.getContentPane().add(panelFour);
+		panelFive.add(checkedInPasslabel);
+		panelFive.add(bagVollabel);
+		panelFive.add(bagWeighLabel);
+		panelFive.add(feelabel);
+		
+		frameFour.getContentPane().add(panelFive);
 
 	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -246,8 +253,7 @@ public class kisok extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == lastNameVerifyButton) {
-
-			if (!checkInMachineObj.checkLastName(enteredReferenceNumber, customerLastNameTextField.getText())) {
+			if (!checkInMachineObj.checkLastName(enteredReferenceNumber.trim(), customerLastNameTextField.getText().trim())) {
 
 				lastNameErrorLabel.setVisible(true);
 			} else {
@@ -255,29 +261,27 @@ public class kisok extends JFrame implements ActionListener {
 				customerLastNameTextField.setEnabled(false);
 				lastNameVerifyButton.setVisible(false);
 				createWindowTwo();
-
 			}
 		}
 		if (e.getSource() == extraChargeButton) {
-			extracharge = checkInMachineObj.calcExtraCharge(enteredReferenceNumber, baggaeWeightTextField.getText(),
-					baggageVolumeTextField.getText());
+			extracharge = checkInMachineObj.calcExtraCharge(enteredReferenceNumber.trim(), baggaeWeightTextField.getText().trim(),
+					baggageVolumeTextField.getText().trim());
 			extraChargeLabel.setText("Have to pay" + extracharge + " Pounds Exatra ");
 			extraChargeLabel.setVisible(true);
 		}
 
 		if (e.getSource() == checkInButton) {
-
 			checkInMachineObj.totalPassengersCheckedIn++;
-			panelThree.setVisible(false);
+			frameTwo.getContentPane().removeAll();
+			frameTwo.repaint();
+			frameTwo.dispose();
 			createWindowThree();
-
 		}
 
 		if (e.getSource() == home) {
-
-			createSummaryWindow();
-			
-			
+			frameOne.dispose();
+			createWindowOne();
+			frameThree.dispose();
 		}
 		
 		if(e.getSource()==summary) {
