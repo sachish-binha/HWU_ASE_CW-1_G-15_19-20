@@ -290,3 +290,4 @@ public class kisok extends JFrame implements ActionListener {
 	}
 
 }
+
